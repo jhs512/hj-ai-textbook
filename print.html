@@ -31,6 +31,7 @@
   <label><input type="checkbox" id="opt-tips" checked> 강사 노트 포함</label>
   <label><input type="checkbox" id="opt-workbook" checked> 사전 워크북 포함</label>
   <button id="btn-print">인쇄 / PDF로 저장</button>
+  <button id="btn-present">▶ 전체 모드 (발표)</button>
   <span class="status" id="status">모듈을 불러오는 중…</span>
 </div>
 
@@ -51,6 +52,7 @@
 </main>
 
 <script src="assets/site.js"></script>
+<script src="assets/slides.js"></script>
 <script>
 (function () {
   var ORDER = [
@@ -72,10 +74,12 @@
     document.querySelectorAll("#content .box.tip").forEach(function (b) { b.style.display = showTips ? "" : "none"; });
     document.querySelectorAll("#content section[data-workbook]").forEach(function (s) { s.style.display = showWb ? "" : "none"; });
     document.querySelectorAll("#toc li[data-workbook]").forEach(function (l) { l.style.display = showWb ? "" : "none"; });
+    if (window.SLIDES) window.SLIDES.refresh();
   }
   document.getElementById("opt-tips").addEventListener("change", applyOptions);
   document.getElementById("opt-workbook").addEventListener("change", applyOptions);
   document.getElementById("btn-print").addEventListener("click", function () { window.print(); });
+  document.getElementById("btn-present").addEventListener("click", function () { if (window.SLIDES) window.SLIDES.enter(); });
 
   Promise.all(ORDER.map(function (p) {
     return fetch(p.href).then(function (r) { return r.text(); }).then(function (html) {
@@ -114,8 +118,9 @@
       toc.appendChild(li);
     });
     if (window.SITE) window.SITE.addCopyButtons(content);
+    if (window.SLIDES) window.SLIDES.refresh();
     applyOptions();
-    status.textContent = "준비 완료 · Chrome에서 인쇄 → 대상 'PDF로 저장' · 배경 그래픽 켜기";
+    status.textContent = "준비 완료 · 인쇄 → 'PDF로 저장' · 배경 그래픽 켜기 · Ctrl+←/→ 모듈 이동";
   });
 })();
 </script>

@@ -14,7 +14,7 @@
     { href: "print.html", num: "", title: "전체 보기 / PDF 출력", time: "" }
   ];
 
-  var here = location.pathname.split("/").pop() || "index.html";
+  function here() { return location.pathname.split("/").pop() || "index.html"; }
 
   function el(tag, attrs, children) {
     var e = document.createElement(tag);
@@ -30,6 +30,8 @@
   function buildSidebar() {
     var side = document.getElementById("sidebar");
     if (!side) return;
+    var wasOpen = side.classList.contains("open");
+    side.innerHTML = "";
 
     var toggle = el("button", { class: "mobile-toggle", text: "목차" });
     toggle.addEventListener("click", function () { side.classList.toggle("open"); });
@@ -45,12 +47,11 @@
         el("span", { text: p.title }),
         p.time ? el("span", { class: "time", text: p.time }) : null
       ]);
-      if (p.href === here) a.classList.add("active");
+      if (p.href === here()) a.classList.add("active");
       nav.appendChild(a);
     });
     side.appendChild(nav);
 
-    // 현재 페이지 h2 목차
     var h2s = document.querySelectorAll("main h2[id]");
     if (h2s.length) {
       var toc = el("div", { class: "toc" });
@@ -60,14 +61,23 @@
       nav.appendChild(toc);
     }
 
-    side.appendChild(el("div", { class: "side-foot", html: "초안 v0.1 · 2026-10<br><a href=\"print.html\">PDF로 출력하기</a>" }));
+    var foot = el("div", { class: "side-foot" });
+    var presentBtn = el("button", { class: "present-btn", type: "button", html: "▶ 전체 모드 (발표)" });
+    presentBtn.addEventListener("click", function () { if (window.SLIDES) window.SLIDES.enter(); });
+    foot.appendChild(presentBtn);
+    foot.appendChild(el("div", { class: "keys", html: "<kbd>Ctrl</kbd>+<kbd>←</kbd>/<kbd>→</kbd> 모듈 이동" }));
+    foot.appendChild(el("div", { html: "초안 v0.1 · 2026-10<br><a href=\"print.html\">PDF로 출력하기</a>" }));
+    side.appendChild(foot);
+    if (wasOpen) side.classList.add("open");
   }
 
   function buildPager() {
     var main = document.querySelector("main");
     if (!main || document.body.classList.contains("no-pager")) return;
+    var old = main.querySelector(":scope > .pager");
+    if (old) old.remove();
     var list = PAGES.filter(function (p) { return p.href; });
-    var i = list.findIndex(function (p) { return p.href === here; });
+    var i = list.findIndex(function (p) { return p.href === here(); });
     if (i < 0) return;
     var prev = list[i - 1], next = list[i + 1];
     var pager = el("div", { class: "pager" });
@@ -80,8 +90,9 @@
   function addCopyButtons(root) {
     (root || document).querySelectorAll(".prompt").forEach(function (p) {
       if (p.querySelector(".copy")) return;
-      var b = el("button", { class: "copy", text: "복사" });
-      b.addEventListener("click", function () {
+      var b = el("button", { class: "copy", type: "button", text: "복사" });
+      b.addEventListener("click", function (e) {
+        e.stopPropagation();
         var text = p.innerText.replace(/^복사\s*/, "").trim();
         navigator.clipboard.writeText(text).then(function () {
           b.textContent = "복사됨"; setTimeout(function () { b.textContent = "복사"; }, 1500);
@@ -91,11 +102,13 @@
     });
   }
 
-  window.SITE = { PAGES: PAGES, addCopyButtons: addCopyButtons };
-
-  document.addEventListener("DOMContentLoaded", function () {
+  function render() {
     buildSidebar();
     buildPager();
     addCopyButtons();
-  });
+  }
+
+  window.SITE = { PAGES: PAGES, addCopyButtons: addCopyButtons, render: render, here: here };
+
+  document.addEventListener("DOMContentLoaded", render);
 })();

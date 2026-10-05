@@ -271,3 +271,60 @@ ul.checklist li::before { content: ""; position: absolute; left: 2px; top: 7px; 
   section.print-module { break-before: page; }
   section.print-module:first-of-type { break-before: auto; }
 }
+
+/* ---------- 전체 모드(발표) ---------- */
+#sidebar .present-btn { width: 100%; padding: 9px 10px; border: 0; border-radius: 8px; background: var(--accent); color: #fff; font-weight: 700; font-size: 13.5px; cursor: pointer; margin-bottom: 8px; }
+#sidebar .present-btn:hover { filter: brightness(1.1); }
+#sidebar .keys { margin-bottom: 10px; }
+kbd { font-family: inherit; font-size: 11px; border: 1px solid #c9ced6; border-bottom-width: 2px; border-radius: 4px; padding: 0 5px; background: #fff; }
+
+.present-bar, #slide-flash { display: none; }
+
+body.present { background: #fff; }
+body.present #sidebar, body.present .pager, body.present .print-bar, body.present .cover, body.present .print-toc { display: none !important; }
+body.present .layout { display: block; }
+body.present main { max-width: 1400px; margin: 0 auto; padding: 56px 88px 110px; min-height: 100vh; font-size: 19px; line-height: 1.7; }
+body.present section.print-module { margin: 0; padding: 0; border: 0; }
+body.present .slide { display: none; }
+body.present .slide.active { display: block; animation: slidein .18s ease-out; }
+@keyframes slidein { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+body.present h1 { font-size: 44px; }
+body.present .lead { font-size: 22px; }
+body.present h2 { font-size: 34px; margin-top: 0; }
+body.present h3 { font-size: 25px; }
+body.present h4 { font-size: 20px; }
+body.present table { font-size: 17px; }
+body.present .prompt { font-size: 18px; }
+body.present .box { font-size: 18px; }
+body.present .timeline .seg { font-size: 16px; }
+body.present .steps > li b.t { font-size: 20px; }
+body.present .card p { font-size: 17px; }
+body.present .module-label { font-size: 14px; }
+body.present .hero h1 { font-size: 48px; }
+
+body.present .present-bar {
+  display: flex; align-items: center; gap: 8px;
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
+  background: rgba(30, 34, 48, .96); color: #fff;
+  padding: 10px 18px; font-size: 14px;
+  backdrop-filter: blur(4px);
+}
+.present-bar button { background: rgba(255,255,255,.1); color: #fff; border: 1px solid rgba(255,255,255,.22); border-radius: 7px; padding: 6px 12px; font-size: 14px; cursor: pointer; font-family: inherit; }
+.present-bar button:hover { background: rgba(255,255,255,.22); }
+.present-bar .pb-prev, .present-bar .pb-next { font-size: 20px; line-height: 1; padding: 3px 14px; }
+.present-bar .pb-title { font-weight: 700; margin-left: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 40vw; }
+.present-bar .pb-count { opacity: .8; margin-right: 10px; }
+.present-bar .pb-hint { margin-left: auto; opacity: .6; font-size: 12.5px; }
+.present-bar .pb-exit { background: #c94c4c; border-color: #c94c4c; }
+body.present #slide-flash { display: block; position: fixed; top: 24px; left: 50%; transform: translateX(-50%); background: rgba(30,34,48,.9); color: #fff; padding: 8px 18px; border-radius: 999px; font-size: 14px; opacity: 0; transition: opacity .2s; pointer-events: none; z-index: 60; }
+body.present #slide-flash.on { opacity: 1; }
+
+@media (max-width: 900px) {
+  body.present main { padding: 24px 18px 110px; font-size: 17px; }
+  body.present h1 { font-size: 30px; } body.present h2 { font-size: 24px; }
+  .present-bar .pb-hint, .present-bar .pb-fs { display: none; }
+}
+@media print {
+  .present-bar, #slide-flash, .present-btn, #sidebar .keys { display: none !important; }
+  .slide { display: block !important; }
+}
