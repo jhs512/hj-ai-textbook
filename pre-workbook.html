@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>사전 워크북 — 생성형 AI 업무 활용 교재</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="layout">
+<aside id="sidebar"></aside>
+<main>
+
+<span class="module-label">모듈 0 · 사전 워크북 (교육 전 자율 학습, 약 40분)</span>
+<h1>계정 · 인터페이스 · 프롬프트 기초</h1>
+<p class="lead">교육 당일에는 기초 설명을 생략하고 바로 실습에 들어갑니다. 이 워크북을 교육 전날까지 끝내 주세요.</p>
+
+<div class="box objectives">
+  <div class="box-title">완료 기준</div>
+  <ul>
+    <li>세 서비스에 모두 로그인하여 "안녕하세요"에 답을 받아 본다.</li>
+    <li>새 대화·파일 첨부·모델 선택·대화 기록 위치를 세 서비스에서 찾을 수 있다.</li>
+    <li>프롬프트 5요소로 간단한 업무 요청문을 하나 써 본다.</li>
+  </ul>
+</div>
+
+<h2 id="account">1. 계정 만들기와 로그인</h2>
+<table>
+  <thead><tr><th style="width:120px">서비스</th><th>주소</th><th>계정</th><th>비고</th></tr></thead>
+  <tbody>
+    <tr><td><span class="badge chatgpt">ChatGPT</span></td><td>chatgpt.com</td><td>이메일 또는 Google/Microsoft/Apple 계정</td><td>무료로 시작 가능. 휴대폰 인증을 요구할 수 있음</td></tr>
+    <tr><td><span class="badge claude">Claude</span></td><td>claude.ai</td><td>이메일 또는 Google 계정</td><td>무료로 시작 가능. 무료 플랜은 사용량 한도가 비교적 빨리 옴</td></tr>
+    <tr><td><span class="badge gemini">Gemini</span></td><td>gemini.google.com</td><td>Google 계정</td><td>Google Docs·Sheets·NotebookLM과 같은 계정 사용 권장</td></tr>
+  </tbody>
+</table>
+
+<div class="box warn">
+  <div class="box-title">계정 관련 주의</div>
+  <ul>
+    <li>기관 업무용 메일 계정으로 가입할지, 개인 계정으로 할지는 <strong>기관 지침</strong>을 먼저 확인합니다. 지침이 없으면 교육 중에는 개인 계정을 권장합니다.</li>
+    <li>세 서비스 모두 기본 설정에서 대화 내용이 모델 개선에 사용될 수 있습니다. 설정에서 <strong>"데이터 학습 사용 안 함"</strong>(ChatGPT: 설정 → 데이터 제어 → 모두를 위한 모델 개선 끄기 / Gemini: 활동 관리 / Claude: 개인정보 설정)을 확인해 두세요.</li>
+  </ul>
+</div>
+
+<h2 id="ui">2. 인터페이스 공통 구조</h2>
+<p>세 서비스의 화면 구성은 거의 같습니다. 아래 다섯 가지 위치를 각 서비스에서 찾아 보세요.</p>
+<table>
+  <thead><tr><th style="width:160px">요소</th><th>역할</th><th>ChatGPT</th><th>Claude</th><th>Gemini</th></tr></thead>
+  <tbody>
+    <tr><td><strong>새 대화</strong></td><td>주제가 바뀌면 새로 시작. 한 대화에 여러 주제를 섞으면 품질이 떨어짐</td><td>왼쪽 위 연필 아이콘</td><td>왼쪽 위 "새 채팅"</td><td>왼쪽 위 "새 채팅"</td></tr>
+    <tr><td><strong>입력창 · 첨부</strong></td><td>텍스트 입력, 파일(PDF·이미지·엑셀) 첨부</td><td>입력창 왼쪽 "+"</td><td>입력창 왼쪽 "+"</td><td>입력창 왼쪽 "+"</td></tr>
+    <tr><td><strong>모델 선택</strong></td><td>빠른 모델 vs 깊이 생각하는 모델</td><td>화면 상단 모델 이름 클릭</td><td>입력창 아래 모델 이름</td><td>입력창 아래 모델 이름 또는 상단</td></tr>
+    <tr><td><strong>대화 기록</strong></td><td>지난 대화 다시 열기·이름 바꾸기·삭제</td><td>왼쪽 사이드바</td><td>왼쪽 사이드바 "채팅"</td><td>왼쪽 사이드바 "최근"</td></tr>
+    <tr><td><strong>에이전트 메뉴</strong></td><td>반복 업무용 맞춤 비서 (모듈 2·3·4에서 생성)</td><td>사이드바 "GPT" / "프로젝트"</td><td>사이드바 "프로젝트"</td><td>사이드바 "Gem 관리자"</td></tr>
+  </tbody>
+</table>
+<div class="box tip">
+  <div class="box-title">한 가지 더: 결과 다루기</div>
+  <p>답변 아래의 <strong>복사 · 다시 생성 · 좋아요/싫어요</strong> 버튼을 확인하세요. 마음에 안 들면 "다시 생성"보다 <strong>무엇이 부족한지 한 줄 더 적어</strong> 요청하는 편이 훨씬 빨리 좋아집니다.</p>
+</div>
+
+<h2 id="prompt">3. 프롬프트 기초: 5요소</h2>
+<p>좋은 요청문은 아래 다섯 가지를 담습니다. 모두 넣을 필요는 없지만 <strong>과제와 형식</strong>은 거의 항상 필요합니다.</p>
+<table>
+  <thead><tr><th style="width:110px">요소</th><th>질문</th><th>예시</th></tr></thead>
+  <tbody>
+    <tr><td><strong>역할</strong></td><td>AI가 누구 입장에서 쓰나?</td><td>"공공기관 기획팀 10년차 담당자로서"</td></tr>
+    <tr><td><strong>맥락</strong></td><td>어떤 상황·배경인가?</td><td>"내부 보고용, 결재권자는 부서장, 분량 1쪽"</td></tr>
+    <tr><td><strong>과제</strong></td><td>정확히 무엇을 하라는 건가?</td><td>"아래 회의 메모를 기안문 초안으로 작성"</td></tr>
+    <tr><td><strong>형식</strong></td><td>어떤 모양으로 내놓나?</td><td>"제목-추진배경-주요내용-향후계획 순, 개조식"</td></tr>
+    <tr><td><strong>제약</strong></td><td>하지 말 것·꼭 지킬 것은?</td><td>"없는 수치 만들지 말고 [확인 필요]로 표시"</td></tr>
+  </tbody>
+</table>
+
+<h3>나쁜 예 → 좋은 예</h3>
+<div class="prompt" data-label="나쁜 예">보고서 써줘. 디지털 전환 관련.</div>
+<div class="prompt" data-label="좋은 예 (5요소 적용)">당신은 공공기관 기획부서의 10년차 담당자입니다. [역할]
+우리 기관은 내년 '디지털 민원 창구 확대' 사업을 검토 중이며, 이 문서는 부서장 보고용 1쪽 요약입니다. [맥락]
+아래 메모를 바탕으로 보고서 초안을 작성해 주세요. [과제]
+형식: 제목 / 1. 추진 배경 / 2. 주요 내용 / 3. 기대 효과 / 4. 향후 계획, 개조식, 각 항목 3줄 이내. [형식]
+메모에 없는 수치나 사실은 만들지 말고 "[확인 필요]"로 표시하세요. [제약]
+
+--- 메모 ---
+<span class="var">- 현재 창구 민원 대기시간 평균 25분
+- 온라인 신청 비율 38%
+- 내년 모바일 신청 도입 검토
+- 예산은 미정</span></div>
+
+<div class="box tip">
+  <div class="box-title">바로 써먹는 요령 4가지</div>
+  <ol>
+    <li><strong>구분선을 쓴다.</strong> 지시와 자료 사이에 <code>---</code> 같은 구분선을 넣으면 AI가 "자료"와 "명령"을 헷갈리지 않습니다.</li>
+    <li><strong>예시를 하나 보여준다.</strong> 우리 기관 기존 문서 한 단락(공개 가능한 것)을 "이 톤으로"라고 붙이면 문체가 바로 맞춰집니다.</li>
+    <li><strong>한 번에 다 하지 않는다.</strong> 초안 → 구조 수정 → 문장 다듬기 순서로 나눠 요청합니다.</li>
+    <li><strong>모르면 묻게 한다.</strong> "작성 전에 불명확한 점이 있으면 먼저 질문하세요"를 붙이면 엉뚱한 초안이 줄어듭니다.</li>
+  </ol>
+</div>
+
+<h2 id="security-basic">4. 보안 기본 수칙 (교육 전 필독)</h2>
+<table>
+  <thead><tr><th style="width:120px">구분</th><th>예시</th><th class="c" style="width:120px">AI 입력</th></tr></thead>
+  <tbody>
+    <tr><td>공개 정보</td><td>보도자료, 공시 자료, 공고문, 공공데이터포털 데이터, 법령·규정</td><td class="c" style="color:#2d7a3b;font-weight:700">가능</td></tr>
+    <tr><td>일반 업무 정보</td><td>공개 예정 문서 초안, 회의 메모(개인정보 제외), 일반 업무 절차</td><td class="c" style="color:#8a6500;font-weight:700">기관 지침 확인</td></tr>
+    <tr><td>비공개·민감 정보</td><td>개인정보(이름·연락처·주민번호), 미공개 예산·인사·감사 자료, 계약 상대방 정보, 대외비</td><td class="c" style="color:#a33a3a;font-weight:700">불가</td></tr>
+  </tbody>
+</table>
+<p>판단이 어려우면 <strong>"이 내용이 내일 신문에 나와도 괜찮은가?"</strong>를 기준으로 삼으세요. 상세 기준과 마스킹 방법은 <a href="m5-apply.html#security">모듈 5</a>에서 다룹니다.</p>
+
+<h2 id="checklist">5. 사전 점검 체크리스트</h2>
+<ul class="checklist">
+  <li>ChatGPT 로그인 → "안녕하세요, 테스트입니다" 입력 → 답변 확인</li>
+  <li>Claude 로그인 → 같은 테스트</li>
+  <li>Gemini 로그인 → 같은 테스트</li>
+  <li>세 서비스에서 "데이터 학습 사용" 설정 위치 확인</li>
+  <li>ChatGPT 또는 Claude에 아무 PDF 하나 첨부 → "이 문서를 3줄로 요약" 성공</li>
+  <li>Google 계정으로 docs.google.com, sheets.google.com, notebooklm.google.com 접속 확인</li>
+  <li>위 3절의 '좋은 예' 프롬프트를 내 업무 하나로 바꿔 써 보기 (교육 당일 지참)</li>
+</ul>
+
+<div class="box check">
+  <div class="box-title">자가 점검 퀴즈 (모듈 1에서 함께 확인)</div>
+  <ol>
+    <li>주제가 바뀌었을 때 같은 대화창에서 계속 질문하면 어떤 문제가 생기나?</li>
+    <li>프롬프트 5요소 중 "제약"에 들어갈 문장 하나를 말해 보세요.</li>
+    <li>"계약 상대방 담당자 연락처가 포함된 엑셀"을 요약시켜도 되는가? 안 된다면 어떻게 하면 되는가?</li>
+  </ol>
+</div>
+
+</main>
+</div>
+<script src="assets/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>모듈 4. Gemini 업무 활용 — 생성형 AI 업무 활용 교재</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="layout">
+<aside id="sidebar"></aside>
+<main>
+
+<span class="module-label">모듈 4 · 1.5H · <span class="badge gemini">Gemini</span></span>
+<h1>Gemini 업무 활용</h1>
+<p class="lead">발표용 도식·이미지·PPT를 만들고, Google 문서·스프레드시트 안에서 Gemini를 부르고, NotebookLM으로 자료를 근거 기반으로 검토합니다. 마지막으로 '민원 답변 Gem'을 만들고 공공데이터를 시트로 집계·시각화합니다.</p>
+
+<div class="box objectives">
+  <div class="box-title">학습 목표</div>
+  <ul>
+    <li>업무 도식·발표 이미지를 Gemini로 생성하고 Google Slides에 넣는다.</li>
+    <li>Google Docs·Sheets 안의 Gemini 패널로 문서 요약·표 생성·수식 작성을 한다.</li>
+    <li>NotebookLM에 자료를 올려 출처가 표시되는 Q&amp;A와 브리핑 문서를 받는다.</li>
+    <li>Gemini Gems로 '민원 답변 Gem'을 만든다.</li>
+    <li>나라장터·ALIO·공공데이터포털 데이터를 시트로 집계하고 차트로 시각화한다.</li>
+  </ul>
+</div>
+
+<div class="timeline">
+  <div class="seg"><b>20분</b>4.1 이미지·도식·PPT</div>
+  <div class="seg"><b>15분</b>4.2 Docs·Sheets 연동</div>
+  <div class="seg"><b>15분</b>4.3 NotebookLM 자료 검토</div>
+  <div class="seg"><b>15분</b>4.4 민원 답변 Gem</div>
+  <div class="seg"><b>25분</b>4.5 공공 예제: 시트 집계·시각화</div>
+</div>
+
+<div class="box tip">
+  <div class="box-title">강사 노트 · 시작 전 확인</div>
+  <ul>
+    <li>Gemini 앱(gemini.google.com)과 Google Docs/Sheets/Slides, NotebookLM(notebooklm.google.com) 모두 <strong>같은 Google 계정</strong>으로 로그인되어 있어야 합니다.</li>
+    <li>Docs·Sheets 안의 Gemini 사이드 패널은 개인 무료 계정에서도 대부분 열리지만, 기관 Workspace 계정은 관리자 설정에 따라 꺼져 있을 수 있습니다. 그 경우 Gemini 앱에서 만들고 "Docs로 내보내기"로 우회합니다.</li>
+    <li>이미지 생성은 사람 얼굴·실존 인물·로고 요청 시 거부될 수 있습니다. 업무용은 도식·아이콘·배경 위주로 안내합니다.</li>
+  </ul>
+</div>
+
+<h2 id="image">4.1 이미지·도식·PPT 생성</h2>
+<p>Gemini는 텍스트로 이미지를 만들고(Imagen/Nano Banana 계열), 만든 결과를 Google Slides·Docs로 바로 내보냅니다. 발표 자료에서 가장 시간을 잡아먹는 <strong>"개념 도식"과 "표지·구역 배경"</strong>을 맡깁니다.</p>
+
+<h3>실습 4-1. 업무 흐름 도식 만들기</h3>
+<ol class="steps">
+  <li><b class="t">Gemini 앱에서 아래 프롬프트</b>도식은 이미지로 받는 방법과, 텍스트(표/구조)로 받아 Slides에서 도형으로 그리는 방법 두 가지가 있습니다. 먼저 이미지로 받아 봅니다.</li>
+  <li><b class="t">수정 요청</b>"3단계를 4단계로 늘려 줘", "색을 파란 계열로, 글자는 한글로" 등. 이미지 안 한글이 깨지면 <strong>"글자는 넣지 말고 도형만"</strong>으로 받은 뒤 Slides에서 글자를 얹습니다.</li>
+  <li><b class="t">다운로드 → Slides 삽입</b>이미지 다운로드 후 Google Slides(또는 PPT)에 삽입. 또는 Gemini 답변 하단 "공유 및 내보내기" → "Docs로 내보내기".</li>
+</ol>
+<div class="prompt" data-label="프롬프트 · 도식 이미지"><span class="var">민원 접수 → 담당 배정 → 처리 → 결과 통보 → 만족도 조사</span> 5단계 업무 흐름을 보여 주는 깔끔한 플랫 디자인 도식 이미지를 만들어 주세요.
+- 가로형 16:9, 흰 배경, 파란색·회색 2톤
+- 각 단계는 둥근 사각형 + 간단한 아이콘, 화살표로 연결
+- 글자는 넣지 말 것 (내가 나중에 넣을 예정)
+- 공공기관 보고서에 어울리는 절제된 스타일</div>
+
+<h3>실습 4-2. PPT 개요 → Google Slides 초안</h3>
+<div class="prompt" data-label="프롬프트 · 발표 자료 구성">아래 보고서 내용으로 10분 발표용 슬라이드 8장 구성안을 만들어 주세요.
+각 슬라이드마다: 슬라이드 제목 / 핵심 메시지 1줄 / 본문 불릿 3개 이내 / 시각 요소 제안(도식·표·사진 중) / 발표자 노트 2줄
+마지막에 이 구성을 Google Slides로 내보낼 수 있게 정리해 주세요.
+
+--- 보고서 내용 ---
+<span class="var">(모듈 2에서 만든 보고서 초안 붙여 넣기)</span></div>
+<p>답변 아래 "공유 및 내보내기" 메뉴에 Docs 내보내기가 있습니다. Slides로 바로 보내는 기능은 계정·시점에 따라 다르므로, 없으면 Docs로 보낸 뒤 Slides의 Gemini 패널(오른쪽 위 ✦)에서 "이 개요로 슬라이드 만들어 줘"라고 요청합니다.</p>
+
+<div class="box tip">
+  <div class="box-title">강사 노트 · 이미지 사용 시 주의</div>
+  <ul>
+    <li>생성 이미지에는 보이지 않는 워터마크(SynthID)가 들어갑니다. 공식 홍보물에 쓸 때는 기관 홍보 지침을 확인합니다.</li>
+    <li>실존 인물·지도·기관 로고·국가 상징은 생성하지 않습니다. 저작권·초상권 문제가 생깁니다.</li>
+    <li>차트·그래프는 이미지 생성이 아니라 <strong>4.5의 시트 차트</strong>로 만듭니다. 이미지 생성 차트는 숫자가 틀립니다.</li>
+  </ul>
+</div>
+
+<h2 id="workspace">4.2 Google 문서·스프레드시트 연동</h2>
+<p>Docs·Sheets·Slides·Gmail 오른쪽 위 <strong>✦(Gemini) 아이콘</strong>을 누르면 사이드 패널이 열립니다. 지금 보고 있는 문서를 그대로 읽고, 다른 Drive 파일을 <code>@파일명</code>으로 끌어올 수 있습니다.</p>
+
+<h3>실습 4-3. Docs 안에서 요약·재작성</h3>
+<ol class="steps">
+  <li><b class="t">Docs 새 문서 → 모듈 2 보고서 초안 붙여 넣기</b></li>
+  <li><b class="t">✦ 패널 열기 → "이 문서를 3줄로 요약해 줘"</b>패널 답변의 "삽입" 버튼으로 문서 맨 위에 요약을 넣습니다.</li>
+  <li><b class="t">문단 선택 → "Gemini로 다시 쓰기"</b>선택한 문단 옆에 뜨는 ✦ → "더 간결하게", "격식 있게", "다듬기". 선택 부분만 바뀝니다(ChatGPT 캔버스와 같은 역할).</li>
+  <li><b class="t">다른 파일 참조</b>패널에 <code>@</code> 입력 → Drive 파일 선택 → "@○○규정 기준으로 이 문서의 근거 조항을 각주 형태로 제안해 줘"</li>
+</ol>
+
+<h3>실습 4-4. Sheets 안에서 수식·표 만들기</h3>
+<ol class="steps">
+  <li><b class="t">가상 데이터 입력</b>3.2의 민원 유형 표(유형/접수/처리/평균처리일수)를 A1부터 붙여 넣습니다.</li>
+  <li><b class="t">✦ 패널에서 수식 요청</b>"E열에 처리율(처리/접수)을 % 형식으로 넣는 수식 알려 줘" → 수식을 받아 셀에 붙여 넣습니다.</li>
+  <li><b class="t">패널에서 분석 요청</b>"이 표에서 처리율이 가장 낮은 유형과 그 이유로 볼 수 있는 점을 알려 줘" → 답변을 보고서에 쓸 메모로 저장.</li>
+  <li><b class="t">AI 함수 사용 (선택)</b>셀에 <code>=AI("다음 민원 유형을 '행정/시설/기타'로 분류", A2)</code>처럼 AI 함수가 열리는 계정이면 분류·요약을 셀 단위로 할 수 있습니다. 안 열리면 패널로 대체.</li>
+</ol>
+<div class="prompt" data-label="프롬프트 · Sheets 패널에서 쓰는 요청 모음">· E열에 처리율 = 처리/접수를 소수 첫째 자리 %로 넣는 수식
+· 유형별로 접수 대비 처리 건수를 비교하는 세로 막대 차트를 만들어 줘
+· 평균 처리일수가 5일 넘는 행만 노란색으로 조건부 서식 거는 방법
+· 이 표를 보고서용 문장 3줄로 요약 (개조식)
+· 월별 시트 12개를 하나로 합치는 QUERY 또는 IMPORTRANGE 수식 예시</div>
+
+<h2 id="notebooklm">4.3 자료 검토: NotebookLM</h2>
+<p>NotebookLM(notebooklm.google.com)은 <strong>내가 올린 자료만을 근거로</strong> 답하는 도구입니다. 답변 문장마다 출처 번호가 붙고, 클릭하면 원문 위치로 이동합니다. 여러 보고서·규정·회의록을 "검토"하는 일에 가장 안전합니다.</p>
+
+<h3>실습 4-5. 노트북 만들고 검토하기</h3>
+<ol class="steps">
+  <li><b class="t">새 노트북 생성 → 소스 추가</b>PDF·Google Docs·웹 URL·유튜브·붙여넣기 텍스트 가능. 실습: 모듈 2·3에서 쓴 ALIO 공시 PDF, 나라장터 공고문, 규정 PDF를 모두 올립니다(최대 50개).</li>
+  <li><b class="t">자동 요약 확인</b>소스별 요약과 노트북 전체 개요가 자동 생성됩니다. "핵심 주제" 칩을 눌러 봅니다.</li>
+  <li><b class="t">출처 확인하며 질문</b>"세 기관 중 신규채용이 가장 많은 곳은? 출처 표시" → 답변의 번호 아이콘 클릭 → 원문 하이라이트 확인.</li>
+  <li><b class="t">스튜디오 기능</b>오른쪽 패널에서 <strong>브리핑 문서</strong>, <strong>FAQ</strong>, <strong>학습 가이드</strong>, <strong>타임라인</strong>, <strong>오디오 개요(팟캐스트식 대화, 한국어 지원)</strong>를 생성. 업무용은 브리핑 문서와 FAQ가 유용합니다.</li>
+  <li><b class="t">노트에 저장</b>좋은 답변은 "노트에 저장"으로 고정. 노트북 자체를 동료와 공유할 수 있습니다(공개 자료만).</li>
+</ol>
+<div class="prompt" data-label="프롬프트 · NotebookLM 검토 질문">1. 올린 자료들 사이에 서로 모순되거나 수치가 다른 부분이 있으면 출처와 함께 모두 알려 줘.
+2. 이 공고문에서 우리 기관 계약 규정과 충돌할 가능성이 있는 조건을 찾아 줘. 각각 두 문서의 출처를 나란히 표시해 줘.
+3. 이 자료들만 보고 알 수 없는 것(공백)은 무엇인가? 추가로 확보해야 할 문서를 제안해 줘.</div>
+
+<div class="box tip">
+  <div class="box-title">강사 노트 · NotebookLM vs 일반 채팅</div>
+  <p>"ChatGPT·Claude·Gemini 채팅은 '아는 것 + 올린 것'으로 답하고, NotebookLM은 '올린 것만'으로 답합니다. 그래서 환각이 적고 출처가 보입니다. 대신 창의적 초안 작성에는 약합니다. <strong>검토·대조·회의 준비</strong>는 NotebookLM, <strong>초안 작성</strong>은 채팅형으로 역할을 나누세요."</p>
+</div>
+
+<h2 id="gems">4.4 AI 에이전트: Gemini Gems로 '민원 답변 Gem' 만들기</h2>
+<p>Gem은 Gemini판 맞춤형 비서입니다. 지침과 참고 파일을 넣어 두면 사이드바에서 바로 호출됩니다. 민원 답변은 <strong>형식이 정해져 있고, 반복되고, 톤이 중요</strong>해 Gem에 가장 잘 맞습니다.</p>
+
+<h3>실습 4-6. Gem 만들기</h3>
+<ol class="steps">
+  <li><b class="t">Gem 관리자 열기</b>Gemini 왼쪽 사이드바 "Gem 탐색" 또는 "Gem 관리자" → "새 Gem 만들기".</li>
+  <li><b class="t">이름·지침 입력</b>이름: <code>민원 답변 Gem (○○팀)</code>. 지침란에 아래 템플릿 붙여 넣기. 오른쪽 "✦ Gemini로 지침 다듬기"를 누르면 지침을 구조화해 줍니다.</li>
+  <li><b class="t">파일 추가</b>민원 답변 표준 예시(공개 가능), 자주 묻는 질문 목록, 관련 안내문. <strong>실제 민원인 정보가 든 파일은 금지.</strong></li>
+  <li><b class="t">미리보기에서 테스트</b>오른쪽 미리보기에 가상 민원 입력 → 답변 형식·톤 확인 → 지침 수정 반복.</li>
+  <li><b class="t">저장</b>저장하면 사이드바에 고정됩니다. 공유는 기관 지침 확인 후.</li>
+</ol>
+
+<div class="prompt" data-label="Gem 지침 템플릿 · 민원 답변">## 역할
+당신은 <span class="var">○○공단 고객지원팀</span>의 민원 답변 담당자입니다. 사용자가 민원 내용(요지)을 주면 공식 답변서 초안을 작성합니다.
+
+## 답변 구조 (항상 이 순서)
+1. 인사 및 민원 접수 확인 (1~2문장, 민원 요지를 다시 말해 공감 표시)
+2. 검토 결과 (핵심 답을 먼저, 근거 규정·절차는 뒤에)
+3. 조치 사항 또는 안내 (할 수 있는 것 / 할 수 없는 것 명확히)
+4. 추가 문의처 (부서명·연락처는 "[담당부서 연락처]"로 자리만 남길 것)
+5. 맺음 인사
+
+## 어투와 규칙
+- 존댓말, 쉬운 말. 법령 용어는 괄호로 쉬운 설명 병기
+- 한 문장 50자 이내, 전체 500자 이내 (사용자가 길이를 지정하면 그에 따름)
+- 민원인 탓으로 들리는 표현 금지("~하셨어야", "규정상 불가피")
+- 약속할 수 없는 기한·결과를 단정하지 말 것 ("~할 예정입니다" 대신 "~검토하겠습니다")
+- 근거 규정은 사용자가 준 자료나 첨부 파일에 있는 것만 사용, 없으면 "[근거 확인 필요]"
+- 민원인 이름·연락처 등 개인정보가 입력되면 답변에 반복하지 말고 "[민원인]"으로 대체
+
+## 출력 마지막에
+"▶ 담당자 확인 사항" 제목으로 답변 전 확인할 점 2~3개 (예: 처리 기한, 유사 민원 선례)</div>
+
+<div class="prompt" data-label="테스트 민원 (가상)"><span class="var">민원 요지: 지난주 시설 이용 예약을 했는데 당일 가 보니 다른 단체가 사용 중이었음. 환불과 사과를 요구함. 예약 확인 문자는 받았다고 함.</span>
+답변 길이 400자 이내.</div>
+
+<div class="box warn">
+  <div class="box-title">보안 주의 · 민원 업무</div>
+  <p>민원은 개인정보 밀도가 가장 높은 업무입니다. Gem에 넣는 것은 <strong>민원 요지(사실관계만)</strong>이지 민원 원문이 아닙니다. 이름·연락처·주소·차량번호·사건번호는 입력 전에 지웁니다. 마스킹 방법은 <a href="m5-apply.html#security">모듈 5</a>.</p>
+</div>
+
+<h2 id="public">4.5 [공공 예제] 나라장터·ALIO 데이터를 스프레드시트로 집계·시각화 (+data.go.kr)</h2>
+<div class="box example">
+  <div class="box-title">공공 예제 · 세 가지 데이터 소스</div>
+  <ul>
+    <li><strong>ALIO 통합공시 엑셀</strong>(alio.go.kr → 통합공시): 항목별 전 기관 데이터. 예: "신규채용 현황" 전 기관 엑셀.</li>
+    <li><strong>나라장터 개찰 결과·계약 현황</strong>(g2b.go.kr → 정보공개 / 조달정보개방포털 data.g2b.go.kr): 기관별 계약 건수·금액.</li>
+    <li><strong>공공데이터포털</strong>(data.go.kr): 파일 데이터(CSV/엑셀) 검색. 예: "공공기관 채용정보", "지자체 민원 통계".</li>
+  </ul>
+</div>
+
+<h3>자료 준비</h3>
+<ol class="steps">
+  <li><b class="t">ALIO 통합공시 → 항목 선택 → 엑셀 다운로드</b>예: 2025년 "신규채용 현황" 또는 "복리후생비". 수백 행짜리 엑셀 1개.</li>
+  <li><b class="t">Google Sheets에 가져오기</b>Sheets → 파일 → 가져오기 → 업로드. 첫 행이 머리글인지 확인. 병합 셀이 있으면 "데이터 → 분할"로 정리하거나 Gemini 패널에 "머리글이 2줄로 병합돼 있는데 한 줄로 정리하는 방법"을 물어봅니다.</li>
+  <li><b class="t">(선택) data.go.kr CSV 1개 추가</b>검색 → "파일데이터" → CSV 다운로드 → 새 시트 탭으로 가져오기. 인코딩이 깨지면 "가져오기 시 문자 인코딩 EUC-KR"을 선택.</li>
+</ol>
+
+<h3>실습 4-7. 유형별·지역별 집계</h3>
+<ol class="steps">
+  <li><b class="t">✦ 패널 → 집계 요청</b>아래 프롬프트. 피벗 테이블을 Gemini가 직접 만들어 주거나, 만드는 방법을 안내합니다. 결과를 새 탭 "집계"에 둡니다.</li>
+  <li><b class="t">우리 기관 위치 찾기</b>"우리 기관(○○공단)은 유형 내 몇 위이고, 중앙값 대비 어느 정도인가?"</li>
+  <li><b class="t">차트 만들기</b>"기관 유형별 평균 신규채용 인원을 가로 막대 차트로, 우리 기관은 다른 색으로 강조" → 삽입된 차트의 제목·축 라벨 확인.</li>
+</ol>
+<div class="prompt" data-label="프롬프트 · Sheets 집계">이 시트는 ALIO <span class="var">2025년 신규채용 현황</span> 전 기관 데이터입니다.
+1) '기관유형' 열 기준으로 기관 수, 신규채용 합계, 기관당 평균, 중앙값을 집계한 피벗 테이블을 새 시트 "집계"에 만들어 줘 (또는 만드는 수식과 단계를 알려 줘)
+2) '<span class="var">○○공단</span>'이 속한 유형 안에서 신규채용 인원 순위와 백분위를 계산해 줘
+3) 데이터에 빈 셀·"-"·단위 불일치가 있으면 어떤 행인지 알려 줘 (집계에서 제외할지 판단할 수 있게)</div>
+
+<h3>실습 4-8. 나라장터 계약 현황 결합</h3>
+<div class="prompt" data-label="프롬프트 · 두 데이터 결합">"ALIO" 탭에는 기관별 현원이, "나라장터" 탭에는 기관별 <span class="var">2025년 용역계약 건수·금액</span>이 있습니다. 기관명이 조금 다르게 표기된 경우가 있습니다(예: "한국○○공단" vs "○○공단").
+1) 기관명을 기준으로 두 표를 합치는 방법을 알려 줘 (VLOOKUP/XLOOKUP 수식 예시 포함). 이름이 안 맞는 기관 목록을 먼저 뽑아 줘
+2) 합친 뒤 "현원 1인당 계약금액" 열을 추가해 줘
+3) 산점도(x: 현원, y: 계약금액)로 그려 주고 눈에 띄는 기관 3곳을 알려 줘. 단, 이유를 단정하지 말고 "확인해 볼 만한 점"으로 적어 줘</div>
+
+<h3>실습 4-9. 보고용 요약과 공유</h3>
+<ol class="steps">
+  <li><b class="t">패널에서 요약</b>"집계 결과를 보고서 '2. 주요 내용'에 넣을 개조식 3줄로 요약해 줘. 우열 표현 금지."</li>
+  <li><b class="t">차트를 Docs/Slides로</b>차트 오른쪽 위 ⋮ → "차트 복사" → Docs·Slides에 붙여넣기(연결 유지).</li>
+  <li><b class="t">출처 표기</b>시트 하단 또는 보고서에 "자료: ALIO 통합공시(조회일 ○○○○.○○.○○), 나라장터(data.g2b.go.kr)". 공공데이터는 <strong>조회일</strong>을 꼭 적습니다. 공시는 수정됩니다.</li>
+</ol>
+
+<div class="box check">
+  <div class="box-title">체크포인트 (모듈 4 종료)</div>
+  <ul>
+    <li>도식 이미지 1장을 Slides에 넣었는가?</li>
+    <li>Docs 패널로 요약을 삽입하고, Sheets 패널로 수식 1개를 받아 넣었는가?</li>
+    <li>NotebookLM 답변의 출처 번호를 클릭해 원문을 확인했는가?</li>
+    <li>'민원 답변 Gem'이 저장되어 사이드바에 보이는가? 테스트 답변에 "[담당부서 연락처]" 자리가 남아 있는가?</li>
+    <li>집계 시트의 합계를 피벗이 아닌 SUM으로 한 번 더 확인했는가?</li>
+  </ul>
+</div>
+
+<div class="box tip">
+  <div class="box-title">강사 노트 · 모듈 5로 넘기기</div>
+  <p>"세 도구로 같은 종류의 일을 다 해 봤습니다. 이제 각자 하나를 골라 자기 업무에 써 볼 차례입니다. 단, 그 전에 '내 업무 자료를 넣어도 되는가'를 판단하는 기준부터 잡겠습니다."</p>
+</div>
+
+</main>
+</div>
+<script src="assets/site.js"></script>
+</body>
+</html>

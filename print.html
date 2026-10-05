@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>전체 보기 / PDF 출력 — 생성형 AI 업무 활용 교재</title>
+<link rel="stylesheet" href="assets/style.css">
+<style>
+  .print-bar { position: sticky; top: 0; z-index: 10; background: var(--accent); color: #fff; padding: 12px 24px; display: flex; gap: 16px; align-items: center; flex-wrap: wrap; font-size: 14px; }
+  .print-bar button { background: #fff; color: var(--accent); border: 0; border-radius: 8px; padding: 8px 16px; font-weight: 700; cursor: pointer; font-size: 14px; }
+  .print-bar label { display: flex; align-items: center; gap: 4px; }
+  .print-bar .status { margin-left: auto; opacity: .85; }
+  main.print-main { max-width: 860px; margin: 0 auto; }
+  .cover { text-align: center; padding: 120px 0 80px; }
+  .cover .module-label { font-size: 14px; }
+  .cover h1 { font-size: 40px; margin: 20px 0 10px; }
+  .cover .sub { font-size: 20px; color: var(--muted); }
+  .cover .meta { margin-top: 48px; color: var(--muted); font-size: 15px; line-height: 2; }
+  .print-toc { break-after: page; }
+  .print-toc ol { font-size: 16px; line-height: 2.1; }
+  section.print-module { margin-top: 80px; padding-top: 24px; border-top: 3px solid var(--accent); }
+  @media print {
+    .cover { break-after: page; padding-top: 180px; }
+    section.print-module { margin-top: 0; border-top: 0; padding-top: 0; }
+  }
+</style>
+</head>
+<body class="no-pager">
+<div class="print-bar no-print">
+  <strong>PDF 출력 모드</strong>
+  <label><input type="checkbox" id="opt-tips" checked> 강사 노트 포함</label>
+  <label><input type="checkbox" id="opt-workbook" checked> 사전 워크북 포함</label>
+  <button id="btn-print">인쇄 / PDF로 저장</button>
+  <span class="status" id="status">모듈을 불러오는 중…</span>
+</div>
+
+<main class="print-main">
+  <div class="cover">
+    <span class="module-label">교육 교재 · 초안 v0.1</span>
+    <h1>생성형 AI 업무 활용</h1>
+    <div class="sub">ChatGPT · Claude · Gemini 3종 비교 실습<br>공공기관 실무자 과정 (6H)</div>
+    <div class="meta">총 6시간 · 강의 30% / 실습 70%<br>2026. 10.</div>
+  </div>
+
+  <div class="print-toc">
+    <h2 style="border:0">목차</h2>
+    <ol id="toc"></ol>
+  </div>
+
+  <div id="content"></div>
+</main>
+
+<script src="assets/site.js"></script>
+<script>
+(function () {
+  var ORDER = [
+    { href: "index.html", title: "과정 소개" },
+    { href: "pre-workbook.html", title: "모듈 0. 사전 워크북", workbook: true },
+    { href: "m1-ot.html", title: "모듈 1. OT & 생성형 AI 업무 활용 개요 (0.5H)" },
+    { href: "m2-chatgpt.html", title: "모듈 2. ChatGPT 업무 활용 (1.5H)" },
+    { href: "m3-claude.html", title: "모듈 3. Claude 업무 활용 (1.5H)" },
+    { href: "m4-gemini.html", title: "모듈 4. Gemini 업무 활용 (1.5H)" },
+    { href: "m5-apply.html", title: "모듈 5. 내 업무 적용 & 정리 (1H)" }
+  ];
+  var content = document.getElementById("content");
+  var toc = document.getElementById("toc");
+  var status = document.getElementById("status");
+
+  function applyOptions() {
+    var showTips = document.getElementById("opt-tips").checked;
+    var showWb = document.getElementById("opt-workbook").checked;
+    document.querySelectorAll("#content .box.tip").forEach(function (b) { b.style.display = showTips ? "" : "none"; });
+    document.querySelectorAll("#content section[data-workbook]").forEach(function (s) { s.style.display = showWb ? "" : "none"; });
+    document.querySelectorAll("#toc li[data-workbook]").forEach(function (l) { l.style.display = showWb ? "" : "none"; });
+  }
+  document.getElementById("opt-tips").addEventListener("change", applyOptions);
+  document.getElementById("opt-workbook").addEventListener("change", applyOptions);
+  document.getElementById("btn-print").addEventListener("click", function () { window.print(); });
+
+  Promise.all(ORDER.map(function (p) {
+    return fetch(p.href).then(function (r) { return r.text(); }).then(function (html) {
+      var doc = new DOMParser().parseFromString(html, "text/html");
+      var main = doc.querySelector("main");
+      // 모듈 내부 링크를 이 페이지 앵커로 바꾸기
+      main.querySelectorAll("a[href]").forEach(function (a) {
+        var h = a.getAttribute("href");
+        var m = h.match(/^([a-z0-9-]+\.html)(#.*)?$/);
+        if (m) a.setAttribute("href", m[2] || ("#sec-" + m[1].replace(".html", "")));
+      });
+      // id 충돌 방지: 섹션 접두어
+      var prefix = p.href.replace(".html", "");
+      main.querySelectorAll("[id]").forEach(function (e) { e.id = prefix + "-" + e.id; });
+      main.querySelectorAll('a[href^="#"]').forEach(function (a) {
+        var h = a.getAttribute("href");
+        if (!h.startsWith("#sec-")) a.setAttribute("href", "#" + prefix + "-" + h.slice(1));
+      });
+      return { page: p, main: main };
+    }).catch(function () { return { page: p, main: null }; });
+  })).then(function (results) {
+    results.forEach(function (r) {
+      var sec = document.createElement("section");
+      sec.className = "print-module";
+      sec.id = "sec-" + r.page.href.replace(".html", "");
+      if (r.page.workbook) sec.setAttribute("data-workbook", "1");
+      if (r.main) {
+        while (r.main.firstChild) sec.appendChild(r.main.firstChild);
+      } else {
+        sec.innerHTML = "<p style='color:#a33'>" + r.page.title + " 을(를) 불러오지 못했습니다. 로컬 파일로 열면 fetch가 차단됩니다. GitHub Pages 주소 또는 로컬 서버(예: <code>python -m http.server</code>)로 여세요.</p>";
+      }
+      content.appendChild(sec);
+      var li = document.createElement("li");
+      if (r.page.workbook) li.setAttribute("data-workbook", "1");
+      li.innerHTML = "<a href='#" + sec.id + "'>" + r.page.title + "</a>";
+      toc.appendChild(li);
+    });
+    if (window.SITE) window.SITE.addCopyButtons(content);
+    applyOptions();
+    status.textContent = "준비 완료 · Chrome에서 인쇄 → 대상 'PDF로 저장' · 배경 그래픽 켜기";
+  });
+})();
+</script>
+</body>
+</html>
